@@ -1,6 +1,32 @@
-# SupportAgent.AI - Proje Yol Haritası ve Sprint Planı
+# 🤖 SupportAgent.AI - Proje Dokümantasyonu
 
-Bu döküman, **SupportAgent.AI** (Akıllı Müşteri Destek ve Talep Yönetim Ajanı) projemizin 4 haftalık sıkıştırılmış geliştirme planını, mimari kararlarını ve sprint hedeflerini içermektedir. Takım olarak hedefimiz; tamamen açık kaynaklı araçlar kullanarak, kurumsal standartlarda, güvenli ve canlıya alınmaya hazır bir MVP (Minimum Uygulanabilir Ürün) üretmektir.
+## 👥 Takım Bilgileri (Team Information)
+* **Takım İsmi:** The Last AIBenders
+* **Takım Rolleri:**
+  * **Scrum Master & Product Owner:** Beyza Nur Ercan
+  * **Developer Team:** Herkes (Cross-functional Team)
+
+---
+
+## 🎯 Ürün Detayları (Product Details)
+
+### 📌 Ürün İsmi
+**SupportAgent.AI**
+
+### 📝 Ürün Açıklaması (Product Description)
+SupportAgent.AI; işletmelerin müşteri destek operasyonlarını insan seviyesinde bir doğruluk ve esneklikle otomatikleştiren, yeni nesil bir **Bilişsel Yapay Zeka Ajanı (Cognitive AI Agent)** sistemidir. Geleneksel ve kural tabanlı chatbotların aksine sistemimiz; karmaşık müşteri taleplerini analiz edip yönlendirebilir, işletmenin dinamik bilgi tabanına (Knowledge Base) başvurarak halüsinasyonsuz yanıtlar üretebilir ve kullanıcı geçmişini akıllıca hatırlayarak kişiselleştirilmiş bir destek deneyimi sunar. Tamamen açık kaynaklı modellerle ve veri güvenliği odaklı (On-Premises uyumlu) olarak tasarlanmıştır.
+
+### ✨ Ürün Özellikleri (Core Features)
+* **Akıllı Niyet Analizi ve Orkestrasyon (Intent Routing):** Gelen mesajların tonunu ve amacını (soru, şikayet, üyelik iptali vb.) anlar ve süreci doğru alt mekanizmalara otonom olarak yönlendirir.
+* **Güvenilir Bilgi Üretimi (RAG - Retrieval-Augmented Generation):** Şirketin kargo, iade politikaları, SSS ve kullanım kılavuzlarını tarayarak müşteriye uydurma değil, her zaman kaynak odaklı ve %100 doğru bilgi sağlar.
+* **Kullanıcı Bazlı İzole Hafıza (Multi-User Conversational Memory):** Veritabanı seviyesinde thread tabanlı durum yönetimi sunar. Ahmet'in konuşma geçmişi ile Mehmet'inki asla karışmaz; ajan geçmiş konuşmaları referans alarak sohbeti sürdürür.
+* **Güvenli Kimlik Doğrulama (Authentication):** Her kullanıcı için JWT tabanlı güvenli giriş ve kayıt mekanizması barındırır.
+* **Mikroservis ve Canlıya Hazır Mimari:** FastAPI, Streamlit ve PostgreSQL bileşenleri Dockerize edilmiş olup, bulut veya yerel sunuculara tek komutla dağıtılabilir (`Production-Ready`).
+
+### 👥 Hedef Kitle (Target Audience)
+* **E-Ticaret ve Perakende Şirketleri:** Yoğun kargo, iade ve ürün sorularını 7/24 kesintisiz ve hatasız yanıtlamak isteyen işletmeler.
+* **SaaS (Yazılım) Sağlayıcıları:** Kullanıcı kılavuzları ve teknik dokümantasyon yükü fazla olan, müşterilere hızlı teknik self-servis desteği sunmak isteyen teknoloji firmaları.
+* **KOBİ'ler ve Dijital Girişimler:** Büyük müşteri hizmetleri bütçeleri olmayan ancak müşteri memnuniyetini kurumsal standartlarda tutmayı hedefleyen büyümekte olan işletmeler.
 
 ---
 
@@ -17,34 +43,61 @@ Projemizin sürdürülebilir, modüler ve temiz kod (Clean Code) prensiplerine u
 
 ---
 
-## 📅 4 Haftalık Güncellenmiş Sprint Planı
+## 🗂️ Product Backlog (Ürün İş Listesi)
 
-Geliştirme sürecimizi 2 ana sprinte (her biri 2 hafta) bölerek çevik (Agile) bir yaklaşım benimsedik.
+Projemizin geliştirme sürecinde önceliklendirilen ve Sprint'lere dağıtılacak olan ana iş kalemleri (User Stories & Tasks) aşağıdadır:
 
-### 🚀 Sprint 1: Veri Altyapısı, RAG Pipeline ve Ajan Zekası (1. - 2. Hafta)
-*Bu sprintteki ana odağımız, sistemin veritabanı altyapısını kurmak ve yapay zeka ajanının karar mekanizmasını tamamlamaktır.*
+* **[Epic: Araştırma ve Konsept Tasarımı] - %100 TAMAMLANDI**
+  * `TASK-001`: LLM, RAG ve Yapay Zeka Ajanı (AI Agent) kavramlarının literatür araştırması.
+  * `TASK-002`: Açık kaynaklı frameworklerin (LangChain, LangGraph, CrewAI) kıyaslanması ve mimari seçimi.
+  * `TASK-003`: Veri güvenliği gereksinimleri doğrultusunda Ollama ve yerel veritabanı (PostgreSQL) kullanımının fizibilitesi.
 
-* **1. Hafta: Altyapı Kurulumu ve Vektör Veritabanı (RAG)**
-    * [ ] PostgreSQL ve `pgvector` eklentisini içeren Docker container mimarisinin ayağa kaldırılması.
-    * [ ] Ollama entegrasyonunun tamamlanması ve lokal embedding modelinin test edilmesi.
-    * [ ] Şirket politikalarını ve SSS verilerini içeren yapılandırılmış Markdown (`.md`) veri setinin hazırlanması.
-    * [ ] Dokümanların anlamlı parçalara bölünerek (Chunking) PostgreSQL üzerine vektör olarak kaydedilmesi (RAG Pipeline).
-* **2. Hafta: LangGraph Ajanı ve Çoklu Kullanıcı Hafızası (Memory)**
-    * [ ] FastAPI üzerinde JWT tabanlı Kullanıcı Kayıt (Register) ve Giriş (Login) servislerinin yazılması.
-    * [ ] LangGraph üzerinde "Router" (Yönlendirici) düğümünün kurulması (Gelen talebin bilgi sorgusu mu yoksa şikayet mi olduğunun ayrıştırılması).
-    * [ ] LangGraph `PostgresSaver` mimarisi kullanılarak her kullanıcıya özel `thread_id` tabanlı izole sohbet geçmişinin (Memory) entegre edilmesi.
+* **[Epic: Altyapı ve Veri Yönetimi]**
+  * `TASK-101`: PostgreSQL + `pgvector` veri tabanı Docker ortamının kurulması.
+  * `TASK-102`: Ollama entegrasyonu ve lokal embedding/LLM modellerinin ayağa kaldırılması.
+  * `TASK-103`: Şirket SSS ve politikalarını içeren Markdown formatlı bilgi tabanının (RAG verisi) oluşturulması.
+  * `TASK-104`: Metin parçalama (Chunking) ve vektör veritabanına indeksleme scriptinin yazılması.
 
-### 🐳 Sprint 2: API Entegrasyonu, Client Arayüzü ve Canlıya Dağıtım (3. - 4. Hafta)
-*Bu sprintteki ana odağımız, arka planda çalışan yapay zeka zekasını bir API ile dış dünyaya açmak, kullanıcı arayüzünü giydirmek ve tüm sistemi canlı sunucuya taşımaktır.*
+* **[Epic: Ajan Zekası ve Backend API]**
+  * `TASK-201`: FastAPI üzerinde kullanıcı kayıt (Register) ve giriş (Login) uçlarının kodlanması.
+  * `TASK-202`: LangGraph üzerinde Router ve RAG düğümlerinin (Graph Nodes) tasarlanması.
+  * `TASK-203`: LangGraph `PostgresSaver` ile kullanıcı bazlı dinamik hafıza (Thread Management) altyapısının kurulması.
+  * `TASK-204`: Güvenli token kontrolü yapan `/api/chat` endpoint'inin tamamlanması.
 
-* **3. Hafta: API Uçları ve Streamlit İstemci Geliştirme**
-    * [ ] FastAPI üzerinde dış dünyadan kullanıcı token'ı ve mesaj kabul eden `/api/chat` ucunun (endpoint) yazılması.
-    * [ ] Streamlit üzerinde kullanıcıyı karşılayan Güvenli Giriş/Kayıt ekranlarının kodlanması.
-    * [ ] Giriş yapan kullanıcıların oturum bilgilerinin (`session_state`) korunarak akışkan bir chatbot arayüzünün tamamlanması.
-* **4. Hafta: Dockerize Etme, Temiz Kod Revizyonu ve Canlıya Alım (Deployment)**
-    * [ ] Projenin OOP (Nesne Yönelimli Programlama) prensiplerine göre modüler hale getirilmesi, spagetti kodların temizlenmesi ve kod içi dökümantasyonun tamamlanması.
-    * [ ] `backend` (FastAPI), `frontend` (Streamlit) ve `db` (Postgres) servislerinin `docker-compose.yml` altında birleştirilmesi.
-    * [ ] Projenin uzak bir VPS (Ubuntu Sanal Sunucu) üzerine taşınarak Docker Compose ile canlıya (Production) alınması ve test senaryolarının jüri sunumu için hazır hale getirilmesi.
+* **[Epic: Kullanıcı Arayüzü ve Dağıtım]**
+  * `TASK-301`: Streamlit üzerinde Login/Register arayüz ekranlarının tasarlanması.
+  * `TASK-302`: Streamlit oturum yönetimi (`session_state`) ile akışkan chat ekranının entegrasyonu.
+  * `TASK-303`: Tüm mikroservislerin (FastAPI, Streamlit, DB) tek bir `docker-compose.yml` altında birleştirilmesi.
+  * `TASK-304`: Projenin uzak bir sunucuya (VPS) deploy edilmesi ve canlı ortam testlerinin tamamlanması.
+
+---
+
+## 📅 6 Haftalık Çevik (Agile) Sprint Yol Haritası
+
+Projemiz toplamda 3 Sprint'e bölünmüş olup, ilk sprint başarıyla tamamlanmıştır.
+
+### 🟢 Sprint 1: Öğrenme, Araştırma ve Fizibilite (1. - 2. Hafta) - [TAMAMLANDI]
+*Bu sprint tamamen projenin teknik teorisini öğrenme, açık kaynaklı modelleri araştırma ve mimariyi tasarlama odağıyla yürütülmüştür.*
+* [x] Büyük Dil Modelleri (LLM) ve RAG (Retrieval-Augmented Generation) çalışma prensiplerinin derinlemesine incelenmesi.
+* [x] AI Agent mimarilerinde hafıza (Memory) ve yönlendirme (Orkestrasyon) pratiklerinin araştırılması.
+* [x] Projenin tamamen açık kaynak olabilmesi için `Ollama` ve `LangGraph` kütüphanelerinin dökümantasyon analizleri.
+* [x] Kullanıcı bazlı izole hafıza yönetimi için `PostgreSQL + pgvector` mimari modelinin tasarlanması.
+
+### 🚀 Sprint 2: Altyapı, RAG Pipeline ve Ajan Zekası (3. - 4. Hafta) - [GELECEK SPRINT]
+*Bu sprintteki ana odağımız, sistemin veritabanı altyapısını kurmak, veriyi işlemek ve yapay zeka ajanının karar mekanizmasını backend seviyesinde tamamlamaktır.*
+* [ ] PostgreSQL ve `pgvector` eklentisini içeren Docker container altyapısının ayağa kaldırılması.
+* [ ] Şirket politikalarını ve SSS verilerini içeren yapılandırılmış Markdown (`.md`) bilgi tabanının kod ortamına hazırlanması.
+* [ ] Dokümanların anlamlı parçalara bölünerek (Chunking) PostgreSQL üzerine vektör olarak kaydedilmesi (RAG Pipeline).
+* [ ] FastAPI üzerinde JWT tabanlı Kullanıcı Kayıt (Register) ve Giriş (Login) servislerinin kodlanması.
+* [ ] LangGraph üzerinde Router (Yönlendirici) düğümünün kurulması ve `PostgresSaver` mimarisiyle kullanıcıya özel `thread_id` tabanlı izole sohbet geçmişinin (Memory) entegre edilmesi.
+
+### 🐳 Sprint 3: API Entegrasyonu, Client Arayüzü ve Canlıya Dağıtım (5. - 6. Hafta) - [SON SPRINT]
+*Bu sprintteki ana odağımız, backend'deki zekayı arayüze bağlamak, sistemi kullanıcı dostu hale getirmek ve projeyi canlı sunucuya taşımaktır.*
+* [ ] FastAPI üzerinde dış dünyadan kullanıcı token'ı ve mesaj kabul eden güvenli `/api/chat` ucunun (endpoint) yazılması.
+* [ ] Streamlit üzerinde kullanıcıyı karşılayan Güvenli Giriş/Kayıt ekranlarının tasarlanması.
+* [ ] Giriş yapan kullanıcıların oturum bilgilerinin (`session_state`) korunarak akışkan bir chatbot arayüzünün tamamlanması.
+* [ ] Projenin OOP (Nesne Yönelimli Programlama) prensiplerine göre modüler hale getirilmesi ve temiz kod (Clean Code) revizyonunun yapılması.
+* [ ] `backend` (FastAPI), `frontend` (Streamlit) ve `db` (Postgres) servislerinin `docker-compose.yml` altında birleştirilerek uzak bir sunucuya (VPS) deploy edilmesi.
 
 ---
 
