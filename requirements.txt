@@ -1,0 +1,8 @@
+# Veritabanı ve ORM Katmanı
+sqlalchemy==2.0.31
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+
+# Veri Doğrulama ve Ayar Yönetimi
+pydantic==2.7.4
+pydantic-settings==2.3.4
