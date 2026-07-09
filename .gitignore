@@ -1,0 +1,17 @@
+# Python sanal ortam klasörü (Sol tarafta gördüğüm .venv klasörü)
+.venv/
+env/
+venv/
+
+# Python'ın otomatik ürettiği önbellek dosyaları (Arka planda oluşurlar)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Hassas şifrelerin (Database şifresi, JWT key) duracağı çevre değişkenleri dosyası
+.env
+
+# Kod editörü (VS Code) özel ayarları
+.vscode/
+.idea/
