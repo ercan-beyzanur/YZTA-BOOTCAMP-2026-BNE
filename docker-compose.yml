@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: ankane/pgvector:latest  # pgvector eklentisi hazır gelen Postgres imajı
+    container_name: support_agent_db
+    restart: always
+    environment:
+      POSTGRES_USER: agent_admin
+      POSTGRES_PASSWORD: SecretAgentPassword2026
+      POSTGRES_DB: support_agent_prod
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - agent_network
+
+volumes:
+  postgres_data:
+
+networks:
+  agent_network:
+    driver: bridge

@@ -2,6 +2,7 @@
 .venv/
 env/
 venv/
+ENV/
 
 # Python'ın otomatik ürettiği önbellek dosyaları (Arka planda oluşurlar)
 __pycache__/
@@ -15,3 +16,7 @@ __pycache__/
 # Kod editörü (VS Code) özel ayarları
 .vscode/
 .idea/
+
+# İşletim Sistemi Kalıntıları
+.DS_Store
+Thumbs.db

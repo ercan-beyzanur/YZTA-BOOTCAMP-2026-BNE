@@ -7,7 +7,7 @@ from src.config import settings
 # 1. Asenkron veritabanı motorunu (Engine) oluşturuyoruz
 engine = create_async_engine(
     settings.DATABASE_URL,
-    echo=False,  # SQL sorgularını terminalde görmek istersen True yapabilirsin
+    echo=False, 
     future=True
 )
 
@@ -25,7 +25,6 @@ class Base(DeclarativeBase):
     pass
 
 # 4. Dependency Injection (Bağımlılık Enjeksiyonu) için Session üreteci
-# FastAPI endpoint'lerinde veri tabanına güvenli erişim sağlayacak
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
         try:
