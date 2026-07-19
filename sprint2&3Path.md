@@ -111,6 +111,25 @@ Bu sprint kapsamında projenin temel veri/güvenlik altyapısı kurulmuş ve RAG
 
 <img width="4090" height="1964" alt="image" src="https://github.com/user-attachments/assets/0934a8b5-3af8-4969-9c52-7d0217191a97" />
 
+## 🏁 Kurulum ve Çalıştırma
+
+1.  **Bağımlılıkları Yükleyin:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+2.  **Veritabanını Başlatın (Docker):**
+    ```bash
+    docker-compose up -d
+    ```
+
+3.  **Uygulamayı Ayağa Kaldırın:**
+    ```bash
+    uvicorn src.main:app --reload
+    ```
+
+4.  **API Dökümantasyonu:** Sunucu çalıştıktan sonra `http://127.0.0.1:8000/docs` adresinden Swagger UI'a erişebilirsiniz.
+
 
 ## 🟨 SPRINT 3: Vektör Veritabanı, Embedding & LangGraph Ajan Akışı (DEVAM EDİYOR)
 
