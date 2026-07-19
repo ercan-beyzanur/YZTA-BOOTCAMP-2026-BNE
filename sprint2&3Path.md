@@ -83,21 +83,56 @@ Projemiz toplamda 3 Sprint'e bölünmüş olup, ilk sprint başarıyla tamamlanm
 * [x] Projenin tamamen açık kaynak olabilmesi için `Ollama` ve `LangGraph` kütüphanelerinin dökümantasyon analizleri.
 * [x] Kullanıcı bazlı izole hafıza yönetimi için `PostgreSQL + pgvector` mimari modelinin tasarlanması.
 
-### 🚀 Sprint 2: Altyapı, RAG Pipeline ve Ajan Zekası (3. - 4. Hafta) - [GELECEK SPRINT]
-*Bu sprintteki ana odağımız, sistemin veritabanı altyapısını kurmak, veriyi işlemek ve yapay zeka ajanının karar mekanizmasını backend seviyesinde tamamlamaktır.*
-* [ ] PostgreSQL ve `pgvector` eklentisini içeren Docker container altyapısının ayağa kaldırılması.
-* [ ] Şirket politikalarını ve SSS verilerini içeren yapılandırılmış Markdown (`.md`) bilgi tabanının kod ortamına hazırlanması.
-* [ ] Dokümanların anlamlı parçalara bölünerek (Chunking) PostgreSQL üzerine vektör olarak kaydedilmesi (RAG Pipeline).
-* [ ] FastAPI üzerinde JWT tabanlı Kullanıcı Kayıt (Register) ve Giriş (Login) servislerinin kodlanması.
-* [ ] LangGraph üzerinde Router (Yönlendirici) düğümünün kurulması ve `PostgresSaver` mimarisiyle kullanıcıya özel `thread_id` tabanlı izole sohbet geçmişinin (Memory) entegre edilmesi.
+<img width="4090" height="1964" alt="image" src="https://github.com/user-attachments/assets/c006e323-8cf9-434b-82a9-3684c0344cb7" />
 
-### 🐳 Sprint 3: API Entegrasyonu, Client Arayüzü ve Canlıya Dağıtım (5. - 6. Hafta) - [SON SPRINT]
-*Bu sprintteki ana odağımız, backend'deki zekayı arayüze bağlamak, sistemi kullanıcı dostu hale getirmek ve projeyi canlı sunucuya taşımaktır.*
-* [ ] FastAPI üzerinde dış dünyadan kullanıcı token'ı ve mesaj kabul eden güvenli `/api/chat` ucunun (endpoint) yazılması.
-* [ ] Streamlit üzerinde kullanıcıyı karşılayan Güvenli Giriş/Kayıt ekranlarının tasarlanması.
-* [ ] Giriş yapan kullanıcıların oturum bilgilerinin (`session_state`) korunarak akışkan bir chatbot arayüzünün tamamlanması.
-* [ ] Projenin OOP (Nesne Yönelimli Programlama) prensiplerine göre modüler hale getirilmesi ve temiz kod (Clean Code) revizyonunun yapılması.
-* [ ] `backend` (FastAPI), `frontend` (Streamlit) ve `db` (Postgres) servislerinin `docker-compose.yml` altında birleştirilerek uzak bir sunucuya (VPS) deploy edilmesi.
+<img width="4090" height="1964" alt="image" src="https://github.com/user-attachments/assets/a76860cc-264a-44b2-bf67-ddf841ec6568" />
+
+
+## 🟩 SPRINT 2: Altyapı, Yetkilendirme & Belge İşleme (3. - 4. Hafta) - [TAMAMLANDI]
+
+Bu sprint kapsamında projenin temel veri/güvenlik altyapısı kurulmuş ve RAG pipeline'ının ilk aşaması başarıyla kodlanmıştır.
+
+### 1. Kimlik Doğrulama & Kullanıcı Yönetimi (Auth App)
+*   [x] `User` modelinin SQLAlchemy (Async) kullanılarak PostgreSQL üzerinde tasarlanması.
+*   [x] Şifrelerin güvenli bir şekilde hash'lenmesi (`passlib`, `bcrypt`) mekanizmasının kurulması.
+*   [x] Giriş yapan kullanıcılara JWT (`python-jose`) tabanlı `access_token` üretim altyapısının entegre edilmesi.
+*   [x] Pydantic v2 kullanılarak istek/yanıt şemalarının (`UserRegisterRequest`, `UserLoginRequest`, `TokenResponse`) yazılması.
+*   [x] `/auth/register` ve `/auth/login` API uçlarının (FastAPI Routes) geliştirilmesi ve Repository/Service katmanlarının bağlanması.
+
+### 2. Konteynerizasyon & Çevre Yönetimi
+*   [x] Projenin ihtiyaç duyduğu vektör destekli veritabanının `docker-compose.yml` kullanılarak `ankane/pgvector` imajı ile izole edilmesi.
+*   [x] Veritabanı port (5432) ve kimlik bilgilerinin `src/config.py` ve Docker konfigürasyonları arasında tam uyumlu hale getirilmesi.
+*   [x] FastAPI `lifespan` event'i kullanılarak, sunucu ayağa kalktığı anda veritabanı tablolarının otomatik oluşturulması (Auto-migration).
+
+### 3. Gelişmiş Belge Okuyucu & Parçalayıcı Servis (Document Ingestion)
+*   [x] Kurumsal belgelerin okunabilmesi için PDF (`pypdf`) ve Word (`docx2txt`) okuma fonksiyonlarının `DocumentService` içerisine yazılması.
+*   [x] Markdown (`.md`) ve düz metin (`.txt`) uzantılı dosyaları okuma desteğinin eklenmesi.
+*   [x] Okunan büyük metinlerin anlam bütünlüğünü koruyarak (paragraf ve cümle bazlı) bölünmesi için `langchain-text-splitters` (`RecursiveCharacterTextSplitter`) entegrasyonunun tamamlanması.
+
+<img width="4090" height="1964" alt="image" src="https://github.com/user-attachments/assets/0934a8b5-3af8-4969-9c52-7d0217191a97" />
+
+
+## 🟨 SPRINT 3: Vektör Veritabanı, Embedding & LangGraph Ajan Akışı (DEVAM EDİYOR)
+
+Bu sprintteki hedefimiz, parçaladığımız verileri sayısal vektörlere dönüştürerek kalıcı hale getirmek ve akıllı ajan mimarisini (LangGraph) hayata geçirmektir.
+
+### 1. Vektör Veritabanı Katmanı (pgvector)
+*   [ ] Parçalanan metinlerin (chunks) saklanacağı `document_chunks` tablosu için SQLAlchemy modelinin oluşturulması.
+*   [ ] Tablo içerisine `pgvector.sqlalchemy` modülü kullanılarak 384 boyutlu vektör (`Vector(384)`) sütununun eklenmesi.
+
+### 2. Yerel Embedding ve İndeksleme Servisi
+*   [ ] `sentence-transformers` kütüphanesi ve Türkçe dil desteği yüksek yerel bir model kullanılarak metin parçalarının vektörleştirilmesi.
+*   [ ] Okunan PDF/Word belgelerinin otomatik olarak parçalanıp, vektörleri üretilerek `document_chunks` tablosuna asenkron kaydedilmesi (Ingestion Pipeline).
+
+### 3. Vektör Arama & Retrieval Katmanı
+*   [ ] Veritabanı seviyesinde Cosine Similarity (Kosinüs Benzerliği) veya L2 mesafe fonksiyonları kullanılarak benzerlik araması yapacak repository fonksiyonlarının yazılması.
+*   [ ] Müşteri sorusuna en yakın kurumsal doküman parçalarını getiren servis metodunun tamamlanması.
+
+### 4. LangGraph Tabanlı Akıllı Ajan (Agent) Tasarımı
+*   [ ] Ajanın durumunu (State) ve belleğini yönetecek LangGraph yapısının kurgulanması.
+*   [ ] Gelen kullanıcı talebini analiz eden "Niyet Analizi (Intent Detection)" düğümünün (Node) eklenmesi.
+*   [ ] Bilgi bankasından (RAG) beslenen arama düğümünün ve LLM yanıt üretme döngülerinin grafik (Graph) mimarisine bağlanması.
+*   [ ] Ajanın ürettiği yanıtların ve işlem adımlarının FastAPI rotaları üzerinden dış dünyaya sunulması.
 
 ---
 
