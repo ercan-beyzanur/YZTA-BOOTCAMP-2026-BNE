@@ -1,15 +1,23 @@
 # src/main.py
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from sqlalchemy import text
 from src.database import engine, Base
 from src.routes.auth_routes import router as auth_router
+from src.models.document_vector import DocumentChunk
 
 # 1. Lifespan (Ömür Döngüsü) Yönetimi: 
 # Uygulama başlarken veritabanı tablolarını otomatik oluşturur.
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # 1. Önce vektör eklentisini oluştur ve commit et
+    async with engine.begin() as conn:
+        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector;"))
+    
+    # 2. Eklenti kurulduktan sonra yeni bir bağlantı açıp tabloları oluştur
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        
     yield
 
 # 2. FastAPI Uygulamasını Başlatıyoruz
