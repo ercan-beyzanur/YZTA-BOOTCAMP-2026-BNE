@@ -41,7 +41,6 @@ class RAGService:
         return len(chunks_data)
 
     async def retrieve_context(self, query: str, top_k: int = 3) -> str:
-        """Kullanıcı sorusu için veritabanından en alakalı parçaları getirip tek bir bağlam metni yapar."""
         query_vector = self.embed_service.get_embedding(query)
         similar_chunks = await self.vector_repo.search_similar_chunks(query_vector, limit=top_k)
         
