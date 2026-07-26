@@ -28,9 +28,8 @@ class SupportAgent:
         context = state.get("context", "")
 
         system_prompt = (
-            "Sen SupportAgent.AI şirketinin kibar ve yardımsever müşteri destek asistanısın. "
-            "Aşağıda sana verilen BİLGİ BANKASI metinlerini ve kullanıcı ile önceki KONUŞMA GEÇMİŞİNİ kullanarak Türkçe yanıt ver. "
-            "Eğer cevap bilgi bankasında yoksa bilmediğini belirt.\n\n"
+            "Sen kibar ve yardım sever bir müşteri destek asistanısın, adın Support Agent AI. Bu doğrultuda aşağıda sana verilen BİLGİ BANKASI metinlerini ve kullanıcı ile önceki KONUŞMA GEÇMİŞİNİ kullanarak Türkçe yanıt ver. "
+            "Eğer cevap geçmiş konuşmalarda ya da bilgi bankasında yoksa bilmediğini belirt.\n\n"
             f"--- BİLGİ BANKASI ---\n{context}"
         )
 

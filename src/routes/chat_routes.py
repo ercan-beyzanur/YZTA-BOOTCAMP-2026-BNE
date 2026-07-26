@@ -2,26 +2,33 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.database import get_db
-from src.schemas.chat import ChatRequest, ChatResponse
+from src.schemas.chat_schemas import ChatRequest, ChatResponse
 from src.services.rag_service import RAGService
-from src.agents.support_agent import support_agent  # 👈 Tekil agent instance'ı
+from src.agents.support_agent import support_agent
+from src.services.auth_service import get_current_user  
+from src.models.user import User  
 
 router = APIRouter(prefix="/chat", tags=["Chat & Agent"])
 
 @router.post("/", response_model=ChatResponse)
-async def chat_endpoint(request: ChatRequest, db: AsyncSession = Depends(get_db)):
+async def chat_endpoint(
+    request: ChatRequest, 
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)  
+):
     try:
-        # Her istek kendi taze RAGService instance'ına sahip olur (No Race Condition!)
         rag_service = RAGService(db)
+        
+        internal_thread_id = f"user_session_{current_user.id}"
         
         result = await support_agent.run(
             question=request.question,
-            thread_id=request.thread_id,
+            thread_id=internal_thread_id,
             rag_service=rag_service
         )
 
         return ChatResponse(
-            thread_id=request.thread_id,
+            thread_id=internal_thread_id,
             question=request.question,
             response=result["response"],
             context=result["context"]

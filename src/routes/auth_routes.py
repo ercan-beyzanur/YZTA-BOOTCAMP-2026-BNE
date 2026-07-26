@@ -5,6 +5,8 @@ from src.database import get_db
 from src.repositories.user_repository import UserRepository
 from src.services.auth_service import AuthService
 from src.schemas.auth_schemas import UserRegisterRequest, UserLoginRequest, TokenResponse, UserResponse
+from src.services.auth_service import get_current_user
+from src.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -56,3 +58,7 @@ async def login(
         username=user.username,
         email=user.email
     )
+
+@router.get("/me", response_model=UserResponse)
+async def get_me(current_user: User = Depends(get_current_user)):
+    return current_user

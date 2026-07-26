@@ -3,8 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy import text
 from src.database import engine, Base
-from src.routes.auth_routes import router as auth_router
-from src.models.document_vector import DocumentChunk
+from src.routes import auth_routes, chat_routes
 
 # 1. Lifespan (Ömür Döngüsü) Yönetimi: 
 # Uygulama başlarken veritabanı tablolarını otomatik oluşturur.
@@ -29,7 +28,8 @@ app = FastAPI(
 )
 
 # 3. Yazdığımız Rotaları Uygulamaya Kaydediyoruz (Register)
-app.include_router(auth_router)
+app.include_router(auth_routes.router)
+app.include_router(chat_routes.router)
 
 # 4. Ana Sayfa (Root) Endpoint'i (Sağlık kontrolü için)
 @app.get("/", tags=["Root"])
