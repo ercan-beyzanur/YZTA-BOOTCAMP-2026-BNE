@@ -131,29 +131,64 @@ Bu sprint kapsamında projenin temel veri/güvenlik altyapısı kurulmuş ve RAG
 4.  **API Dökümantasyonu:** Sunucu çalıştıktan sonra `http://127.0.0.1:8000/docs` adresinden Swagger UI'a erişebilirsiniz.
 
 
-## 🟨 SPRINT 3: Vektör Veritabanı, Embedding & LangGraph Ajan Akışı (DEVAM EDİYOR)
+🟨 SPRINT 3: Vektör Veritabanı, Local Embedding & LangGraph Ajan Akışı - [TAMAMLANDI]
+Bu sprintteki hedefimiz; parçalanan metin verilerini sayısal vektörlere dönüştürerek pgvector veritabanına kaydetmek, RAG mimarisini tamamlamak, LangGraph tabanlı akıllı ajanı hayata geçirmek ve kullanıcıya özel izole oturum altyapısını kurmaktı.
 
-Bu sprintteki hedefimiz, parçaladığımız verileri sayısal vektörlere dönüştürerek kalıcı hale getirmek ve akıllı ajan mimarisini (LangGraph) hayata geçirmektir.
+1. Vektör Veritabanı Katmanı (pgvector)
+* [x] Parçalanan metin parçalarının (chunks) saklanacağı document_chunks tablosu SQLAlchemy async altyapısıyla oluşturuldu.
 
-### 1. Vektör Veritabanı Katmanı (pgvector)
-*   [ ] Parçalanan metinlerin (chunks) saklanacağı `document_chunks` tablosu için SQLAlchemy modelinin oluşturulması.
-*   [ ] Tablo içerisine `pgvector.sqlalchemy` modülü kullanılarak 384 boyutlu vektör (`Vector(384)`) sütununun eklenmesi.
+* [x] pgvector.sqlalchemy modülü kullanılarak metinler için 384 boyutlu vektör (Vector(384)) sütunu tabloya eklendi ve veritabanı indekslemesi tamamlandı.
 
-### 2. Yerel Embedding ve İndeksleme Servisi
-*   [ ] `sentence-transformers` kütüphanesi ve Türkçe dil desteği yüksek yerel bir model kullanılarak metin parçalarının vektörleştirilmesi.
-*   [ ] Okunan PDF/Word belgelerinin otomatik olarak parçalanıp, vektörleri üretilerek `document_chunks` tablosuna asenkron kaydedilmesi (Ingestion Pipeline).
+2. Yerel Embedding ve İndeksleme Servisi (Ingestion Pipeline)
+* [x] sentence-transformers kütüphanesi entegre edilerek metin parçalarının tamamen lokalde ve yüksek hızda vektörleştirilmesi sağlandı.
 
-### 3. Vektör Arama & Retrieval Katmanı
-*   [ ] Veritabanı seviyesinde Cosine Similarity (Kosinüs Benzerliği) veya L2 mesafe fonksiyonları kullanılarak benzerlik araması yapacak repository fonksiyonlarının yazılması.
-*   [ ] Müşteri sorusuna en yakın kurumsal doküman parçalarını getiren servis metodunun tamamlanması.
+* [x] PDF, Word, TXT ve MD formatındaki kurumsal belgelerin otomatik okunup parçalanarak vektörleri ile birlikte document_chunks tablosuna asenkron kaydedildiği Ingestion Pipeline hattı kuruldu.
 
-### 4. LangGraph Tabanlı Akıllı Ajan (Agent) Tasarımı
-*   [ ] Ajanın durumunu (State) ve belleğini yönetecek LangGraph yapısının kurgulanması.
-*   [ ] Gelen kullanıcı talebini analiz eden "Niyet Analizi (Intent Detection)" düğümünün (Node) eklenmesi.
-*   [ ] Bilgi bankasından (RAG) beslenen arama düğümünün ve LLM yanıt üretme döngülerinin grafik (Graph) mimarisine bağlanması.
-*   [ ] Ajanın ürettiği yanıtların ve işlem adımlarının FastAPI rotaları üzerinden dış dünyaya sunulması.
+3. Vektör Arama & Retrieval Katmanı
+* [x] Veritabanı seviyesinde Cosine Similarity (Kosinüs Benzerliği) hesaplayan vektör arama repository metotları kodlandı.
+
+* [x] Müşteri sorusunu vektörleştirip bilgi bankasından en alakalı metin parçalarını (top_k=3) getiren RAGService katmanı tamamlandı.
+
+4. LangGraph Tabanlı Akıllı Ajan (Agent) & Oturum İzolasyonu
+* [x] LangGraph Ajan Tasarımı: LangGraph üzerinde AgentState kurgulanarak retrieve (RAG arama) ve generate (LLM yanıt üretimi) düğümleri (nodes) birbirine bağlandı.
+
+* [x] İzole Hafıza (MemorySaver): Kullanıcı sohbet geçmişini güvenle saklayan MemorySaver entegre edildi.
+
+* [x] Backend Oturum Yönetimi: İstemciden thread_id isteme bağımlılığı kaldırıldı; backend tarafında internal_thread_id = f"user_session_{current_user.id}" mantığı ile kullanıcılar arasında %100 izole oturum hafızası sağlandı.
+
+* [x] HTTPBearer Auth Entegrasyonu: FastAPI /chat rotası HTTPBearer standartlarına çekilerek Swagger UI üzerinden yetkili kullanıcıların ajana sorunsuz erişmesi sağlandı.
 
 ---
 
 ## 🛠️ Kurulum ve Canlıya Alım Prensipleri
-Proje geliştirilirken "On-Premises" (Şirket içi) veya "Cloud" (Bulut) ortamlarda doğrudan çalışabilecek şekilde tasarlanmıştır. `docker-compose up --build` komutuyla tüm mikroservisler birbiriyle izole ve güvenli bir ağ köprüsü üzerinden haberleşecek şekilde ayağa kalkmaktadır.
+
+Projemiz, **On-Premises (Şirket İçi)** veya **Cloud (Bulut)** sunucularda veri gizliliğini %100 koruyacak şekilde, bağımsız mikroservis mimarisinde tasarlanmıştır. Tüm sistem iki farklı modda çalıştırılabilir:
+
+---
+
+### 📦 1. Gereksinimler (İndirilmesi Gerekenler)
+
+Sistemi ayağa kaldırmadan önce bilgisayarınızda veya sunucunuzda aşağıdaki araçların kurulu olması gerekmektedir:
+
+| Araç | Sürüm | Kullanım Amacı | Link |
+| :--- | :--- | :--- | :--- |
+| **Python** | `3.10+` | Backend ve Ajan servislerini çalıştırmak için | [İndir](https://www.python.org/downloads/) |
+| **Docker & Docker Desktop** | `20.10+` | Veritabanı ve mikroservisleri konteynerize etmek için | [İndir](https://www.docker.com/products/docker-desktop/) |
+| **Ollama** | `Latest` | Lokal LLM (`llama3`) çalıştırmak için | [İndir](https://ollama.com/) |
+
+---
+
+### 🚀 2. Seçenek A: Docker Compose ile Tek Komutla Çalıştırma (Canlıya Alım / Production)
+
+Canlıya alım (Deployment) senaryosunda PostgreSQL (`pgvector`), FastAPI ve Streamlit servisleri izole bir ağ köprüsü (`bridge network`) üzerinden otomatik olarak ayağa kalkar.
+
+```bash
+# 1. Projeyi indirin
+git clone <repository_url>
+cd support-agent-ai
+
+# 2. .env dosyanızı oluşturun
+cp .env.example .env
+
+# 3. Tüm mikroservisleri derleyin ve arka planda ayağa kaldırın
+docker-compose up -d --build
