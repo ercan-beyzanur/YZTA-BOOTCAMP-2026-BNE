@@ -1,8 +1,9 @@
 version: '3.8'
 
 services:
+  # 1. Veritabanı Servisi (PostgreSQL + pgvector)
   db:
-    image: ankane/pgvector:latest  # pgvector eklentisi hazır gelen Postgres imajı
+    image: ankane/pgvector:latest
     container_name: support_agent_db
     restart: always
     environment:
@@ -13,6 +14,42 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - agent_network
+
+  # 2. Backend API Servisi (FastAPI + LangGraph)
+  backend:
+    build: .
+    container_name: support_agent_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      # config.py içindeki ayarları Docker ortamına göre eziyoruz:
+      - DB_HOST=db
+      - DB_USER=agent_admin
+      - DB_PASSWORD=SecretAgentPassword2026
+      - DB_NAME=support_agent_prod
+      - SECRET_KEY=THE_LAST_AI_BENDERS_SUPER_SECRET_SECURITY_KEY_2026
+      # Mac üzerindeki Ollama'ya erişim adresi:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_HOST=http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - db
+    networks:
+      - agent_network
+
+  # 3. Frontend UI Servisi (React + Vite + Nginx)
+  frontend:
+    build: ./frontend
+    container_name: support_agent_frontend
+    restart: always
+    ports:
+      - "3000:80" # Tarayıcıdan http://localhost:3000 adresinden erişilecek
+    depends_on:
+      - backend
     networks:
       - agent_network
 

@@ -14,7 +14,12 @@ class AgentState(TypedDict):
 class SupportAgent:
     def __init__(self, model_name: str = "llama3"):
         # LLM ve Graph bir kez iliskilendirilir (Stateless ve Concurrency-Safe)
-        self.llm = ChatOllama(model=model_name, temperature=0.2)
+        self.llm = ChatOllama(
+            model=model_name, 
+            temperature=0.1,
+            repeat_penalty=1.18,
+            top_p=0.9
+        )
         self.checkpointer = MemorySaver()
         self.graph = self._build_graph()
 
@@ -28,8 +33,16 @@ class SupportAgent:
         context = state.get("context", "")
 
         system_prompt = (
-            "Sen kibar ve yardım sever bir müşteri destek asistanısın, adın Support Agent AI. Bu doğrultuda aşağıda sana verilen BİLGİ BANKASI metinlerini ve kullanıcı ile önceki KONUŞMA GEÇMİŞİNİ kullanarak Türkçe yanıt ver. "
-            "Eğer cevap geçmiş konuşmalarda ya da bilgi bankasında yoksa bilmediğini belirt.\n\n"
+            "Sen Support Agent AI adında kibar, profesyonel ve yardımsever bir müşteri destek asistanısın.\n\n"
+            "ÖNEMLİ DİL KURALI:\n"
+            "- SADECE VE SADECE TÜRKÇE YANIT VER.\n"
+            "- Bilgi bankasındaki metinler veya kullanıcının mesajı başka dilde olsa bile yanıtını HER ZAMAN akıcı, anlaşılır bir Türkçe ile oluştur.\n"
+            "- Yanıtında kesinlikle İngilizce kelime veya açıklama kullanma.\n\n"
+            "GÖREVİN VE TALİMATLAR:\n"
+            "1. Aşağıda verilen BİLGİ BANKASI metinlerini ve konuşma geçmişini kullanarak kullanıcının sorusunu yanıtla.\n"
+            "2. ASLA KENDİNİ TEKRAR ETME: Aynı bilgiyi, şartı veya iletişim uyarısını yanıt içinde birden fazla kez yineleme. Yanıtlarını net, öz ve anlaşılır tut.\n"
+            "3. MADDELİ ANLATIM: Birden fazla şart, adım veya kural içeren durumları okumayı kolaylaştırmak için maddeler (bullet points) halinde sun.\n"
+            "4. Eğer aranan cevap bilgi bankasında veya önceki konuşmalarda yoksa, uydurma cevaplar verme; kibarca bu konuda bilgin olmadığını belirt.\n\n"
             f"--- BİLGİ BANKASI ---\n{context}"
         )
 
