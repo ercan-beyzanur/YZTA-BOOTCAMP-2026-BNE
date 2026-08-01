@@ -199,6 +199,7 @@ Sistemi ayağa kaldırmadan önce bilgisayarınızda veya sunucunuzda aşağıda
 ---
 
 🚀 2. Uygulamanın Ayağa Kaldırılması
+
 🟢 Seçenek A: Docker Compose ile Tek Komutla Çalıştırma (Önerilen / Production)
 PostgreSQL (pgvector), FastAPI Backend ve React Frontend servisleri izole bir ağ köprüsü (agent_network) üzerinden otomatik olarak ayağa kalkar. Backend, host makinenizde çalışan Ollama servisiyle host.docker.internal üzerinden iletişim kurar.
 
