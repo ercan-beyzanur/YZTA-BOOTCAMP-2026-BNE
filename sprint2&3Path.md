@@ -237,5 +237,3 @@ Sistem ayağa kalktıktan sonra aşağıdaki adreslerden ilgili servislere eriş
 
 🗄️ Database (PostgreSQL): localhost:5432
 ```
-# 3. Tüm mikroservisleri derbnghleyin ve arka planda ayağa kaldırın
-docker-compose up -d --build
