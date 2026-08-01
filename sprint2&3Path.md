@@ -1,10 +1,18 @@
 # 🤖 SupportAgent.AI - Proje Dokümantasyonu
 
+> ℹ️ **Geliştirme ve Sorumluluk Dağılımı:**
+> * **Backend & Sistem Mimarisi:** Arka yüz (FastAPI, LangGraph RAG ajan mimarisi, veritabanı/vektör yapılandırması, izole hafıza yönetimi) ve sistem konfigürasyon/Dockerizasyon süreçlerini içerir.
+> * **Frontend (Arayüz):** Arayüz geliştirme ve kullanıcı deneyimi süreçlerini içerir.
+> * 🔗 **Frontend Reposu:** https://github.com/TolunayYilmaz/YZTA-BOOTCAMP-2026-Dashboard
+
+---
+
 ## 👥 Takım Bilgileri (Team Information)
 * **Takım İsmi:** The Last AIBenders
 * **Takım Rolleri:**
   * **Scrum Master & Product Owner:** Beyza Nur Ercan
-  * **Developer Team:** Herkes (Cross-functional Team)
+  * **Backend & System Architect:** Beyza Nur Ercan
+  * **Frontend Developer & UX Designer:** Tolunay Yılmaz
 
 ---
 
@@ -38,7 +46,7 @@ Projemizin sürdürülebilir, modüler ve temiz kod (Clean Code) prensiplerine u
 * **Ajan Orkestrasyonu:** LangGraph (Çoklu kullanıcı senaryolarında durum yönetimini ve thread tabanlı hafızayı en kararlı yöneten framework olduğu için seçilmiştir).
 * **API Katmanı:** FastAPI (Asenkron mimarisi, yüksek performansı ve otomatik Swagger dökümantasyonu için).
 * **Veritabanı ve Vektör DB:** PostgreSQL + `pgvector` eklentisi. (Ayrı ayrı FAISS ve ilişkisel DB'ler kullanmak yerine; kullanıcı verilerini, sohbet geçmişini ve RAG vektör mimarisini tek bir endüstri standardı veritabanında birleştirerek mimari karmaşıklığı azalttık).
-* **Kullanıcı Arayüzü (Client):** Streamlit (Python tabanlı hızlı prototipleme ve güvenli oturum yönetimi için).
+* **Kullanıcı Arayüzü (Client):** React + Vite (Modern, dinamik, bileşen mimarisine dayalı kullanıcı arayüzü ve Nginx tabanlı sunum için).
 * **Dağıtım ve Altyapı:** Docker & Docker Compose (Mikroservis mimarisini kutulamak ve canlı ortama tek komutla taşımak için).
 
 ---
@@ -65,9 +73,9 @@ Projemizin geliştirme sürecinde önceliklendirilen ve Sprint'lere dağıtılac
   * `TASK-204`: Güvenli token kontrolü yapan `/api/chat` endpoint'inin tamamlanması.
 
 * **[Epic: Kullanıcı Arayüzü ve Dağıtım]**
-  * `TASK-301`: Streamlit üzerinde Login/Register arayüz ekranlarının tasarlanması.
-  * `TASK-302`: Streamlit oturum yönetimi (`session_state`) ile akışkan chat ekranının entegrasyonu.
-  * `TASK-303`: Tüm mikroservislerin (FastAPI, Streamlit, DB) tek bir `docker-compose.yml` altında birleştirilmesi.
+  * `TASK-301`: React üzerinde Login/Register arayüz ekranlarının tasarlanması.
+  * `TASK-302`: React State & Context API ile akışkan chat ekranının entegrasyonu.
+  * `TASK-303`: Tüm mikroservislerin (FastAPI, React Frontend, DB) tek bir `docker-compose.yml` altında birleştirilmesi.
   * `TASK-304`: Projenin uzak bir sunucuya (VPS) deploy edilmesi ve canlı ortam testlerinin tamamlanması.
 
 ---
@@ -164,6 +172,12 @@ Bu sprintteki hedefimiz; parçalanan metin verilerini sayısal vektörlere dön�
 * [x] **React Frontend & Modern UI:** React + Vite + Nginx mimarisinde modern canlı chat arayüzü, mesaj geçmişi akışı ve kullanıcı yönetim paneli geliştirilerek projeye dahil edildi.
 
 * [x] **Full-Stack Dockerize Sistem & Host Tüneli:** Tüm mikroservisler (React Frontend, FastAPI Backend, pgvector DB) izole bir Docker ağına (`agent_network`) taşındı; konteyner içindeki Backend'in yerelde çalışan Ollama'ya erişmesi için `host.docker.internal` bridge yapılandırması eklendi.
+
+<img width="3448" height="1624" alt="image" src="https://github.com/user-attachments/assets/bbd5679c-b029-4c0e-8478-2be5edbe5786" />
+<img width="3438" height="1568" alt="image" src="https://github.com/user-attachments/assets/0bbb05c0-7f9b-4be1-aad4-17f03905aaa1" />
+<img width="3466" height="1590" alt="image" src="https://github.com/user-attachments/assets/2b441176-6f2b-4ef4-9b0c-1188379c443a" />
+<img width="3490" height="1816" alt="image" src="https://github.com/user-attachments/assets/d39180e3-c93b-4a46-bf3a-b4d88125ccf8" />
+<img width="3502" height="1732" alt="image" src="https://github.com/user-attachments/assets/5ca690b5-3d55-4854-95e9-1eaad2ef274a" />
 
 ---
 
