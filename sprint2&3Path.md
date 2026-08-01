@@ -188,7 +188,6 @@ Sistemi ayağa kaldırmadan önce bilgisayarınızda veya sunucunuzda aşağıda
 🟢 Seçenek A: Docker Compose ile Tek Komutla Çalıştırma (Önerilen / Production)
 PostgreSQL (pgvector), FastAPI Backend ve React Frontend servisleri izole bir ağ köprüsü (agent_network) üzerinden otomatik olarak ayağa kalkar. Backend, host makinenizde çalışan Ollama servisiyle host.docker.internal üzerinden iletişim kurar.
 
-Bash
 # 1. Projeyi klonlayın ve proje dizinine geçin
 git clone <repository_url>
 cd support-agent-ai
@@ -202,10 +201,10 @@ ollama run llama3
 
 # 4. Tüm mikroservisleri derleyin ve arka planda ayağa kaldırın
 docker-compose up -d --build
+
 🟡 Seçenek B: Local Geliştirme Modunda Çalıştırma (Development)
 Bu modda veritabanı Docker üzerinde çalışırken, Backend ve Frontend local makinada ayağa kaldırılır. Kod değişikliklerinin anlık yansıması (hot-reload) için uygundur.
 
-Bash
 # 1. Sadece PostgreSQL (pgvector) veritabanı container'ını başlatın
 docker-compose up -d db
 
@@ -223,6 +222,7 @@ uvicorn src.main:app --reload --port 8000
 cd frontend
 npm install
 npm run dev
+
 🌐 Erişim Adresleri
 Sistem ayağa kalktıktan sonra aşağıdaki adreslerden ilgili servislere erişebilirsiniz:
 
