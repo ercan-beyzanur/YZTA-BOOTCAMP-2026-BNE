@@ -230,11 +230,12 @@ npm run dev
 🌐 Erişim Adresleri
 Sistem ayağa kalktıktan sonra aşağıdaki adreslerden ilgili servislere erişebilirsiniz:
 
+```bash
 🎨 Frontend (React UI): http://localhost:3000
 
 ⚙️ Backend API (FastAPI / Swagger): http://localhost:8000/docs
 
 🗄️ Database (PostgreSQL): localhost:5432
-
+```
 # 3. Tüm mikroservisleri derbnghleyin ve arka planda ayağa kaldırın
 docker-compose up -d --build
