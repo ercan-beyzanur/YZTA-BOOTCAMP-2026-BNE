@@ -131,64 +131,108 @@ Bu sprint kapsamında projenin temel veri/güvenlik altyapısı kurulmuş ve RAG
 4.  **API Dökümantasyonu:** Sunucu çalıştıktan sonra `http://127.0.0.1:8000/docs` adresinden Swagger UI'a erişebilirsiniz.
 
 
-🟨 SPRINT 3: Vektör Veritabanı, Local Embedding & LangGraph Ajan Akışı - [TAMAMLANDI]
-Bu sprintteki hedefimiz; parçalanan metin verilerini sayısal vektörlere dönüştürerek pgvector veritabanına kaydetmek, RAG mimarisini tamamlamak, LangGraph tabanlı akıllı ajanı hayata geçirmek ve kullanıcıya özel izole oturum altyapısını kurmaktı.
+ ### 🚀 SPRINT 3: Vektör Veritabanı, RAG, LangGraph Ajan Akışı ve Full-Stack Dockerize Sistem - [TAMAMLANDI]
+
+Bu sprintteki hedefimiz; parçalanan metin verilerini sayısal vektörlere dönüştürerek pgvector veritabanına kaydetmek, RAG mimarisini tamamlamak, LangGraph tabanlı akıllı ajanı Türkçe ve tekrarsız yanıt üretecek şekilde geliştirmek, kullanıcıya özel izole oturum altyapısını kurmak ve tüm sistemi (Frontend + Backend + Veritabanı) Dockerize ederek yayına hazır hale getirmekti.
 
 1. Vektör Veritabanı Katmanı (pgvector)
-* [x] Parçalanan metin parçalarının (chunks) saklanacağı document_chunks tablosu SQLAlchemy async altyapısıyla oluşturuldu.
+* [x] Parçalanan metin parçalarının (chunks) saklanacağı `document_chunks` tablosu SQLAlchemy async altyapısıyla oluşturuldu.
 
-* [x] pgvector.sqlalchemy modülü kullanılarak metinler için 384 boyutlu vektör (Vector(384)) sütunu tabloya eklendi ve veritabanı indekslemesi tamamlandı.
+* [x] `pgvector.sqlalchemy` modülü kullanılarak metinler için 384 boyutlu vektör (`Vector(384)`) sütunu tabloya eklendi ve veritabanı indekslemesi tamamlandı.
 
 2. Yerel Embedding ve İndeksleme Servisi (Ingestion Pipeline)
-* [x] sentence-transformers kütüphanesi entegre edilerek metin parçalarının tamamen lokalde ve yüksek hızda vektörleştirilmesi sağlandı.
+* [x] `sentence-transformers` kütüphanesi entegre edilerek metin parçalarının tamamen lokalde ve yüksek hızda vektörleştirilmesi sağlandı.
 
-* [x] PDF, Word, TXT ve MD formatındaki kurumsal belgelerin otomatik okunup parçalanarak vektörleri ile birlikte document_chunks tablosuna asenkron kaydedildiği Ingestion Pipeline hattı kuruldu.
+* [x] PDF, Word, TXT ve MD formatındaki kurumsal belgelerin otomatik okunup parçalanarak vektörleri ile birlikte `document_chunks` tablosuna asenkron kaydedildiği Ingestion Pipeline hattı kuruldu.
 
 3. Vektör Arama & Retrieval Katmanı
 * [x] Veritabanı seviyesinde Cosine Similarity (Kosinüs Benzerliği) hesaplayan vektör arama repository metotları kodlandı.
 
-* [x] Müşteri sorusunu vektörleştirip bilgi bankasından en alakalı metin parçalarını (top_k=3) getiren RAGService katmanı tamamlandı.
+* [x] Müşteri sorusunu vektörleştirip bilgi bankasından en alakalı metin parçalarını (`top_k=3`) getiren `RAGService` ve RAG API katmanı tamamlandı.
 
-4. LangGraph Tabanlı Akıllı Ajan (Agent) & Oturum İzolasyonu
-* [x] LangGraph Ajan Tasarımı: LangGraph üzerinde AgentState kurgulanarak retrieve (RAG arama) ve generate (LLM yanıt üretimi) düğümleri (nodes) birbirine bağlandı.
+4. LangGraph Tabanlı Akıllı Ajan (Agent), Oturum İzolasyonu & Frontend Entegrasyonu
+* [x] **LangGraph Ajan Tasarımı:** LangGraph üzerinde `AgentState` kurgulanarak `retrieve` (RAG arama) ve `generate` (LLM yanıt üretimi) düğümleri (nodes) birbirine bağlandı.
 
-* [x] İzole Hafıza (MemorySaver): Kullanıcı sohbet geçmişini güvenle saklayan MemorySaver entegre edildi.
+* [x] **Dil ve Tekrar Engelleme Mekanizması:** Sistem prompt'u katı Türkçe yanıt kuralları ile güncellendi; `ChatOllama` konfigürasyonuna `repeat_penalty=1.18` ve `temperature=0.1` eklenerek ajanın döngüye girmesi ve tekrarlı cümleler üretmesi engellendi.
 
-* [x] Backend Oturum Yönetimi: İstemciden thread_id isteme bağımlılığı kaldırıldı; backend tarafında internal_thread_id = f"user_session_{current_user.id}" mantığı ile kullanıcılar arasında %100 izole oturum hafızası sağlandı.
+* [x] **İzole Hafıza (MemorySaver):** Kullanıcı sohbet geçmişini güvenle saklayan `MemorySaver` entegre edildi.
 
-* [x] HTTPBearer Auth Entegrasyonu: FastAPI /chat rotası HTTPBearer standartlarına çekilerek Swagger UI üzerinden yetkili kullanıcıların ajana sorunsuz erişmesi sağlandı.
+* [x] **Backend Oturum Yönetimi:** İstemciden `thread_id` isteme bağımlılığı kaldırıldı; backend tarafında `internal_thread_id = f"user_session_{current_user.id}"` mantığı ile kullanıcılar arasında %100 izole oturum hafızası sağlandı.
+
+* [x] **HTTPBearer Auth Entegrasyonu:** FastAPI `/chat/` rotası HTTPBearer standartlarına çekilerek Swagger UI ve Frontend üzerinden yetkili kullanıcıların ajana sorunsuz erişmesi sağlandı.
+
+* [x] **React Frontend & Modern UI:** React + Vite + Nginx mimarisinde modern canlı chat arayüzü, mesaj geçmişi akışı ve kullanıcı yönetim paneli geliştirilerek projeye dahil edildi.
+
+* [x] **Full-Stack Dockerize Sistem & Host Tüneli:** Tüm mikroservisler (React Frontend, FastAPI Backend, pgvector DB) izole bir Docker ağına (`agent_network`) taşındı; konteyner içindeki Backend'in yerelde çalışan Ollama'ya erişmesi için `host.docker.internal` bridge yapılandırması eklendi.
 
 ---
 
-## 🛠️ Kurulum ve Canlıya Alım Prensipleri
+### 🛠️ Kurulum ve Canlıya Alım Prensipleri
 
-Projemiz, **On-Premises (Şirket İçi)** veya **Cloud (Bulut)** sunucularda veri gizliliğini %100 koruyacak şekilde, bağımsız mikroservis mimarisinde tasarlanmıştır. Tüm sistem iki farklı modda çalıştırılabilir:
+Projemiz, On-Premises (Şirket İçi) veya Cloud (Bulut) sunucularda veri gizliliğini %100 koruyacak şekilde, bağımsız mikroservis mimarisinde tasarlanmıştır. Tüm sistem iki farklı modda çalıştırılabilir.
 
----
-
-### 📦 1. Gereksinimler (İndirilmesi Gerekenler)
+#### 📦 1. Gereksinimler (İndirilmesi Gerekenler)
 
 Sistemi ayağa kaldırmadan önce bilgisayarınızda veya sunucunuzda aşağıdaki araçların kurulu olması gerekmektedir:
 
 | Araç | Sürüm | Kullanım Amacı | Link |
 | :--- | :--- | :--- | :--- |
-| **Python** | `3.10+` | Backend ve Ajan servislerini çalıştırmak için | [İndir](https://www.python.org/downloads/) |
-| **Docker & Docker Desktop** | `20.10+` | Veritabanı ve mikroservisleri konteynerize etmek için | [İndir](https://www.docker.com/products/docker-desktop/) |
-| **Ollama** | `Latest` | Lokal LLM (`llama3`) çalıştırmak için | [İndir](https://ollama.com/) |
+| **Python** | 3.10+ | Local ortamda Backend ve Ajan servislerini çalıştırmak için | [İndir](https://www.python.org/downloads/) |
+| **Node.js** | 18.x+ | Local ortamda Frontend (React) uygulamasını geliştirmek için | [İndir](https://nodejs.org/) |
+| **Docker & Docker Desktop** | 20.10+ | Veritabanı, Backend ve Frontend servislerini konteynerize etmek için | [İndir](https://www.docker.com/products/docker-desktop/) |
+| **Ollama** | Latest | Lokal LLM (`llama3`) çalıştırmak ve ajana zeka sağlamak için | [İndir](https://ollama.com/) |
 
 ---
 
-### 🚀 2. Seçenek A: Docker Compose ile Tek Komutla Çalıştırma (Canlıya Alım / Production)
+#### 🚀 2. Uygulamanın Ayağa Kaldırılması
 
-Canlıya alım (Deployment) senaryosunda PostgreSQL (`pgvector`), FastAPI ve Streamlit servisleri izole bir ağ köprüsü (`bridge network`) üzerinden otomatik olarak ayağa kalkar.
+##### 🟢 Seçenek A: Docker Compose ile Tek Komutla Çalıştırma (Önerilen / Production)
+
+PostgreSQL (pgvector), FastAPI Backend ve React Frontend servisleri izole bir ağ köprüsü (`agent_network`) üzerinden otomatik olarak ayağa kalkar. Backend, host makinenizde çalışan Ollama servisiyle `host.docker.internal` üzerinden iletişim kurar.
 
 ```bash
-# 1. Projeyi indirin
+# 1. Projeyi klonlayın ve proje dizinine geçin
 git clone <repository_url>
 cd support-agent-ai
 
 # 2. .env dosyanızı oluşturun
 cp .env.example .env
 
-# 3. Tüm mikroservisleri derleyin ve arka planda ayağa kaldırın
+# 3. Ollama Llama 3 modelini indirin ve çalıştırın
+ollama pull llama3
+ollama run llama3
+
+# 4. Tüm mikroservisleri derleyin ve arka planda ayağa kaldırın
+docker-compose up -d --build
+
+##### 🟢 Seçenek B: Local Geliştirme Modunda Çalıştırma (Development)
+
+# 1. Sadece PostgreSQL (pgvector) veritabanı container'ını başlatın
+docker-compose up -d db
+
+# 2. Ollama Llama 3 modelini indirin ve çalıştırın
+ollama pull llama3
+ollama run llama3
+
+# 3. Backend'i Ayağa Kaldırın (Ayrı bir terminalde)
+python -m venv .venv
+source .venv/bin/activate  # Windows için: .venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn src.main:app --reload --port 8000
+
+# 4. Frontend'i Ayağa Kaldırın (Ayrı bir terminalde)
+cd frontend
+npm install
+npm run dev
+
+🌐 Erişim Adresleri
+Sistem ayağa kalktıktan sonra aşağıdaki adreslerden ilgili servislere erişebilirsiniz:
+
+🎨 Frontend (React UI): http://localhost:3000
+
+⚙️ Backend API (FastAPI / Swagger): http://localhost:8000/docs
+
+🗄️ Database (PostgreSQL): localhost:5432
+
+# 3. Tüm mikroservisleri derbnghleyin ve arka planda ayağa kaldırın
 docker-compose up -d --build
