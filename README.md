@@ -4,6 +4,7 @@
 > * **Backend & Sistem Mimarisi:** Arka yüz (FastAPI, LangGraph RAG ajan mimarisi, veritabanı/vektör yapılandırması, izole hafıza yönetimi) ve sistem konfigürasyon/Dockerizasyon süreçleri Beyza Nur Ercan tarafından ilerletilmiştir.
 > * **Frontend (Arayüz):** Arayüz geliştirme ve kullanıcı deneyimi süreçleri Tolunay Yılmaz tarafından ilerletilmiştir.
 > * 🔗 **Frontend Reposu:** https://github.com/TolunayYilmaz/YZTA-BOOTCAMP-2026-Dashboard
+> * **Dokümantasyon:** Görkem Bakan proje dokümantasyonu süreçlerini ilerletmiştir.
 
 ---
 
