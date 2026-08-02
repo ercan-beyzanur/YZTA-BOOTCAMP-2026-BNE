@@ -19,7 +19,7 @@ class SupportAgent:
             temperature=0.1,
             repeat_penalty=1.18,
             top_p=0.9,
-            num_predict=500,
+            num_predict=300,
             num_ctx=2048,
         )
         self.checkpointer = MemorySaver()
@@ -44,7 +44,10 @@ class SupportAgent:
             "1. Aşağıda verilen BİLGİ BANKASI metinlerini ve konuşma geçmişini kullanarak kullanıcının sorusunu yanıtla.\n"
             "2. ASLA KENDİNİ TEKRAR ETME: Aynı bilgiyi, şartı veya iletişim uyarısını yanıt içinde birden fazla kez yineleme. Yanıtlarını net, öz ve anlaşılır tut.\n"
             "3. MADDELİ ANLATIM: Birden fazla şart, adım veya kural içeren durumları okumayı kolaylaştırmak için maddeler (bullet points) halinde sun.\n"
-            "4. Eğer aranan cevap bilgi bankasında veya önceki konuşmalarda yoksa, uydurma cevaplar verme; kibarca bu konuda bilgin olmadığını belirt.\n\n"
+            "4. Kullanıcı sana selamlama, merhaba gibi kelimeler kullanmadıkça her seferinde merhaba ile karşılık verme.\n"
+            "5. Kullanıcıya bilgi bankasında bulunanlar dışında başka vaat içeren cümleler kurma.\n"
+            "6. ASLA TAMAMLANMAMIŞ CÜMLE KULLANMA. Çıktı token kısıtına göre cevap üret.\n"
+            "7. Eğer aranan cevap bilgi bankasında veya önceki konuşmalarda yoksa, uydurma cevaplar verme; kibarca bu konuda bilgin olmadığını belirt.\n\n"
             f"--- BİLGİ BANKASI ---\n{context}"
         )
 
