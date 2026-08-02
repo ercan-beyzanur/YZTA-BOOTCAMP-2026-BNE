@@ -196,6 +196,15 @@ Sistemi ayağa kaldırmadan önce bilgisayarınızda veya sunucunuzda aşağıda
 | **Docker & Docker Desktop** | 20.10+ | Veritabanı, Backend ve Frontend servislerini konteynerize etmek için | [İndir](https://www.docker.com/products/docker-desktop/) |
 | **Ollama** | Latest | Lokal LLM (`llama3`) çalıştırmak ve ajana zeka sağlamak için | [İndir](https://ollama.com/) |
 
+### ⚙️ Ortam Değişkenleri (Environment Variables)
+
+Projenin sorunsuz çalışabilmesi için `.env` dosyalarının oluşturulması gerekmektedir:
+
+1. **Frontend Ortam Değişkeni:**
+   `frontend` klasörü altında bir `.env` dosyası oluşturun ve aşağıdaki değişkeni tanımlayın:
+   ```env
+   VITE_API_URL=http://localhost:8000
+
 ---
 
 🚀 2. Uygulamanın Ayağa Kaldırılması
