@@ -18,7 +18,9 @@ class SupportAgent:
             model=model_name, 
             temperature=0.1,
             repeat_penalty=1.18,
-            top_p=0.9
+            top_p=0.9,
+            num_predict=200,
+            num_ctx=2048,
         )
         self.checkpointer = MemorySaver()
         self.graph = self._build_graph()

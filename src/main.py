@@ -1,13 +1,15 @@
-# src/main.py
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
-from src.database import engine, Base
+
+from src.database import engine, Base, AsyncSessionLocal
 from src.routes import auth_routes, chat_routes
+from src.services.rag_service import RAGService
 
 # 1. Lifespan (Ömür Döngüsü) Yönetimi: 
-# Uygulama başlarken veritabanı tablolarını otomatik oluşturur.
+# Uygulama başlarken veritabanı tablolarını ve vektör verilerini otomatik hazırlar.
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # 1. Önce vektör eklentisini oluştur ve commit et
@@ -17,6 +19,26 @@ async def lifespan(app: FastAPI):
     # 2. Eklenti kurulduktan sonra yeni bir bağlantı açıp tabloları oluştur
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        
+    # 3. Otomatik PDF İndeksleme (Eğer veritabanı boşsa)
+    pdf_path = os.path.join("data", "aura_tek_data.pdf")
+    if os.path.exists(pdf_path):
+        try:
+            async with AsyncSessionLocal() as db:
+                rag_service = RAGService(db)
+                # Tabloda veri var mı kontrol et
+                existing_chunks = await rag_service.vector_repo.search_similar_chunks([0.0] * 384, limit=1)
+                
+                if not existing_chunks:
+                    print(f"⏳ [RAG] Veritabanı boş. '{pdf_path}' okunuyor ve indeksleniyor...")
+                    chunks_count = await rag_service.process_and_index_file(pdf_path)
+                    print(f"✅ [RAG] Başarılı! {chunks_count} metin parçası veritabanına kaydedildi.")
+                else:
+                    print("ℹ️ [RAG] Veritabanında doküman parçaları zaten mevcut.")
+        except Exception as e:
+            print(f"⚠️ [RAG] Otomatik indeksleme sırasında bir hata oluştu: {e}")
+    else:
+        print(f"⚠️ [RAG] İndekslenecek PDF bulunamadı: {pdf_path}")
         
     yield
 
